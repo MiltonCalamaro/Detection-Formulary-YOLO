@@ -74,8 +74,10 @@ if __name__ == "__main__":
 
     for c in classes:
         if c not in os.listdir(join('output',basename_folder)):
-            os.mkdir(join('output',basename_folder,c))
-
+            try:
+                os.mkdir(join('output',basename_folder,c))
+            except:
+                pass
     for i in os.listdir(opt.image_folder):
         frame = cv2.imread(join(opt.image_folder,i))
         frame = cv2.resize(frame, (400, 600), interpolation=cv2.INTER_CUBIC)
@@ -103,8 +105,8 @@ if __name__ == "__main__":
                     print("Se detectó {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2, y2))
                     frame = cv2.rectangle(frame, (x1, y1 + box_h), (x2, y1), color, 5)
                     if opt.webcam:
-                        cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 5)# Nombre de la clase detectada
-                        cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,color, 5) # Certeza de prediccion de la clase
+                        cv2.putText(frame, classes[int(cls_pred)], (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)# Nombre de la clase detectada
+                        cv2.putText(frame, str("%.2f" % float(conf)), (x2, y2 - box_h), cv2.FONT_HERSHEY_SIMPLEX, 0.5,color, 2) # Certeza de prediccion de la clase
 
                     try:                    
                         y1 = int(y1)-5
@@ -121,7 +123,7 @@ if __name__ == "__main__":
                         pass           
         if opt.webcam:
             cv2.imshow('frame', Convertir_BGR(RGBimg))
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                break
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            break
     if opt.webcam:
         cv2.destroyAllWindows()
